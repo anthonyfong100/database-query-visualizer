@@ -11,9 +11,8 @@ def home():
 def explain():
     if(request.method == 'GET'):
         return redirect('/')
-    time.sleep(2)
-    print(request.form.keys())
     query = request.form['queryText']
+    time.sleep(2) # TODO: We can call the query parser here
     explanation = ['Anthony is a google intern', 'Anthony is a fb intern', 'Anthony is an apple intern']
     return render_template('index.html', query=query, explanation=explanation)
 
