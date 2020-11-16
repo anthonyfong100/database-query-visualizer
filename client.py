@@ -1,16 +1,23 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
+import time
 
 app = Flask(__name__)
 
-@app.route('/')
-def hello_world():
+@app.route('/', methods= ['GET'])
+def home():
     return render_template('index.html')
 
-@app.route('/explain', methods = ['POST'])
+@app.route('/result', methods= ['POST', 'GET'])
 def explain():
+    if(request.method == 'GET'):
+        return redirect('/')
+    time.sleep(2)
+    print(request.form.keys())
     query = request.form['queryText']
-    print(query)
-    return render_template('index.html')
+    explanation = ['Anthony is a google intern', 'Anthony is a fb intern', 'Anthony is an apple intern']
+    return render_template('index.html', query=query, explanation=explanation)
+
+
 
 
 if __name__ == "__main__":
