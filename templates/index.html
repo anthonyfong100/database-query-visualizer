@@ -26,6 +26,7 @@ content %}
             id="queryTextArea"
             name="queryText"
             rows="10"
+            placeholder="Type your SQL query here"
           ></textarea>
         </div>
         <button id="btnFetch" type="submit" class="btn btn-primary">
@@ -36,10 +37,11 @@ content %}
     <div class="col-6">
       <h3>Query</h3>
       {% if query %}
-      <span>{{query}}</span>
+      <code>{{query}}</code>
       {% else %}
       <span>Insert query to begin</span>
       {% endif %}
+      <hr />
       <h3 class="mt-3">Explanation</h3>
       {% if explanation %}
       <ol>
