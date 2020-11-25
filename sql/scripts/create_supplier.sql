@@ -20,3 +20,5 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.supplier
 	OWNER to postgres;
+
+COPY supplier FROM '/tmp/data/supplier.csv' DELIMITERS '|' CSV;

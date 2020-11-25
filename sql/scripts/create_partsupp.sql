@@ -22,3 +22,5 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.partsupp
 	OWNER to postgres;
+
+COPY partsupp FROM '/tmp/data/partsupp.csv' DELIMITERS '|' CSV;

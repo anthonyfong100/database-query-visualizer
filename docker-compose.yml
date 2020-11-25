@@ -1,4 +1,8 @@
 version: "3"
+
+volumes:
+  pgdata:
+
 services:
   tcph-db:
     image: postgres
@@ -6,6 +10,17 @@ services:
     environment:
       POSTGRES_USERNAME: postgres
       POSTGRES_PASSWORD: password
+    volumes:
+      - ./sql/data:/tmp/data
+      - pgdata:/var/lib/postgresql/data
+      - ./sql/scripts/create_region.sql:/docker-entrypoint-initdb.d/1-create_region.sql
+      - ./sql/scripts/create_nation.sql:/docker-entrypoint-initdb.d/2-create_nation.sql
+      - ./sql/scripts/create_part.sql:/docker-entrypoint-initdb.d/3-create_part.sql
+      - ./sql/scripts/create_supplier.sql:/docker-entrypoint-initdb.d/4-create_supplier.sql
+      - ./sql/scripts/create_partsupp.sql:/docker-entrypoint-initdb.d/5-create_partsupp.sql
+      - ./sql/scripts/create_customer.sql:/docker-entrypoint-initdb.d/6-create_customer.sql
+      - ./sql/scripts/create_orders.sql:/docker-entrypoint-initdb.d/7-create_orders.sql
+      - ./sql/scripts/create_lineitem.sql:/docker-entrypoint-initdb.d/8-create_lineitem.sql
 
   query-visualiser:
     build:

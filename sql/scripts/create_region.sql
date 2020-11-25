@@ -12,3 +12,5 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.region
 	OWNER to postgres;
+
+COPY region FROM '/tmp/data/region.csv' DELIMITERS '|' CSV;
