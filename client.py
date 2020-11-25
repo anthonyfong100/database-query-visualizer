@@ -79,7 +79,6 @@ order by
     cursor.execute("EXPLAIN (FORMAT JSON) " + query)
     plan = cursor.fetchall()
     query_plan = plan[0][0][0]["Plan"]
-    print(query_plan)
     return query_plan
 
 if __name__ == "__main__":
