@@ -35,6 +35,7 @@ pre-commit install
 Download data from [here](https://entuedu-my.sharepoint.com/:f:/g/personal/nlee016_e_ntu_edu_sg/Eu9asRzO8kVGkEYXAaafDbsBUCi4eUeKqyXawFfPnFoiog?e=O6jxY1)
 and extract them to `<project-root-folder-path>/sql/data/`
 
+NOTE: The csv files are huge --> Make sure that your docker engine has around 10gb worth of free space if not the creation of postgres tables will fail
 
 ## Pipenv guide
 Installing new dependencies
