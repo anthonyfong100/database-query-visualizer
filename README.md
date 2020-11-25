@@ -16,7 +16,7 @@ docker-compose build && docker-compose up
 Afterwards head to [url](http://localhost:5000/) 
 
 ## Local development
-This project uses pipenv to manage the dependencies. To install:
+This project uses pipenv to manage the dependencies. To install the repo requirements:
 ~~~
 pipenv install
 pipenv shell
@@ -26,3 +26,10 @@ Installing pre-commit hooks (Suggested)
 ~~~
 pre-commit install
 ~~~
+
+Installing new dependencies
+~~~
+pipenv install <dependency> 
+pipenv install -d <dependency> 
+~~~
+The -d flag is used to specify development dependency
