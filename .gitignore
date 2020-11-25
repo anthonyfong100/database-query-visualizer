@@ -148,3 +148,7 @@ dmypy.json
 
 # vscode
 .vscode
+
+
+# ignore sql data
+sql/data/
