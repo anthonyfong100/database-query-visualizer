@@ -38,7 +38,29 @@ content %}
       <span>Insert query to begin</span>
       {% endif %}
       <hr />
-      <h3 class="mt-3">Explanation</h3>
+      <h3 class="mt-3">Query Plan 1</h3>
+      {% if explanation %}
+      <ol>
+        {% for item in explanation %}
+        <li>{{item}}</li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <span>Insert query to begin</span>
+      {% endif %}
+      <hr />
+      <h3 class="mt-3">Query Plan 2</h3>
+      {% if explanation %}
+      <ol>
+        {% for item in explanation %}
+        <li>{{item}}</li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <span>Insert query to begin</span>
+      {% endif %}
+      <hr />
+      <h3 class="mt-3">Query Plan 3</h3>
       {% if explanation %}
       <ol>
         {% for item in explanation %}
