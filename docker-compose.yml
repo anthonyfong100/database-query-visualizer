@@ -1,0 +1,20 @@
+version: "3"
+services:
+  tcph-db:
+    image: postgres
+    container_name: tcph-db
+    environment:
+      POSTGRES_USERNAME: postgres
+      POSTGRES_PASSWORD: password
+
+  query-visualiser:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URI: postgresql://postgres:password@tcph-db/postgres
+    ports:
+      - "5000:5000"
+    depends_on:
+      - tcph-db
+    restart: "always"
