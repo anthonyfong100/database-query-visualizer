@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for
 import time
-from parser.main import parse
+from sql_parser.main import parse
 
 app = Flask(__name__)
 
