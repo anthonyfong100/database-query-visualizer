@@ -7,7 +7,10 @@ Repo for course project work CX4031 DATABASE SYSTEM PRINCIPLES from NTU.
 Raw csv data is too large to be checked into VCS. Download the data from [here](https://entuedu-my.sharepoint.com/:f:/g/personal/nlee016_e_ntu_edu_sg/Eu9asRzO8kVGkEYXAaafDbsBUCi4eUeKqyXawFfPnFoiog?e=O6jxY1) using your NTU office account.
 
 ## Quick start
-The easiest way to do development on this repo is to use docker
+The easiest way to do development on this repo is to use docker.
+
+Download data from [here](https://entuedu-my.sharepoint.com/:f:/g/personal/nlee016_e_ntu_edu_sg/Eu9asRzO8kVGkEYXAaafDbsBUCi4eUeKqyXawFfPnFoiog?e=O6jxY1)
+and extract them to `<project-root-folder-path>/sql/data/`
 
 Set up the project and the database
 ~~~
