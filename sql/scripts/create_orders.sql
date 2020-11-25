@@ -22,3 +22,5 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.orders
 	OWNER to postgres;
+
+COPY orders FROM '/tmp/data/orders.csv' DELIMITERS '|' CSV;

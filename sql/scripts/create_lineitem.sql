@@ -37,3 +37,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.lineitem
 	OWNER to postgres;
+
+
+COPY lineitem FROM '/tmp/data/lineitem.csv' DELIMITERS '|' CSV;

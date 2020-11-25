@@ -18,3 +18,5 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.part
 	OWNER to postgres;
+
+COPY part FROM '/tmp/data/part.csv' DELIMITERS '|' CSV;

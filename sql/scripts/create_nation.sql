@@ -17,3 +17,6 @@ TABLESPACE pg_default;
 
 ALTER TABLE public.nation
 	owner to postgres;
+
+
+COPY nation FROM '/tmp/data/nation.csv' DELIMITERS '|' CSV;
