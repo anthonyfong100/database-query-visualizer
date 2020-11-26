@@ -17,6 +17,9 @@ class Node:
         explainer = Explainer.explainer_map.get(node_type, test_explain)
         return explainer(query_plan)
 
+    def has_children(self) -> bool:
+        return "Plans" in self.raw_json
+
 
 class QueryPlan:
     """
@@ -30,12 +33,13 @@ class QueryPlan:
 
     def _construct_graph(self, curr_node):
         self.graph.add_node(curr_node)
-        for child in curr_node.raw_json["Plans"]:
-            child_node = Node(child)
-            self.graph.add_edge(
-                curr_node, child_node
-            )  # add both curr_node and child_node
-            self._construct_graph(child_node)
+        if curr_node.has_children():
+            for child in curr_node.raw_json["Plans"]:
+                child_node = Node(child)
+                self.graph.add_edge(
+                    curr_node, child_node
+                )  # add both curr_node and child_node if not present in graph
+                self._construct_graph(child_node)
 
     def calculate_total_cost(self):
         return sum([x.cost for x in self.graph.nodes])
