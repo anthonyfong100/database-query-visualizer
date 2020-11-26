@@ -1,4 +1,4 @@
-from explainers.test_explainer import test_explain
+from explainers.test_explain import test_explain
 from explainer import Explainer
 
 class Tree:
