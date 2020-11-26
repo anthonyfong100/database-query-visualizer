@@ -15,6 +15,7 @@ flask = "*"
 psycopg2-binary = "*"
 networkx = "*"
 matplotlib = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
