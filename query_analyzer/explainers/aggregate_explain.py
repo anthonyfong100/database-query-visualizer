@@ -3,13 +3,15 @@ def aggregate_explain(query_plan):
     strategy = query_plan["Strategy"]
     if strategy == "Sorted":
         result = "The rows are sorted based on their keys."
-        if "Group Key" in plan:
+        if "Group Key" in query_plan:
             result += " They are grouped by the following keys: "
-            for key in plan["Group Key"]:
-                result += key+","
+            for key in query_plan["Group Key"]:
+                result += key + ","
             result += "."
-        if "Filter" in plan:
-            result += " They are filtered by " plan["Filter"].replace("::text", "")
+        if "Filter" in query_plan:
+            result += " They are filtered by " + query_plan["Filter"].replace(
+                "::text", ""
+            )
             result += "."
         return result
     elif strategy == "Hashed":
@@ -20,4 +22,7 @@ def aggregate_explain(query_plan):
         return result
     elif strategy == "Plain":
         return "Result is simply aggregated as normal."
-    else: raise ValueError("Aggregate_explain does not work for strategy: "+strategy)
+    else:
+        raise ValueError(
+            "Aggregate_explain does not work for strategy: " + strategy
+        )
