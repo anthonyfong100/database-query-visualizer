@@ -17,14 +17,17 @@ def home():
 def explain():
     if request.method == "GET":
         return redirect("/")
+      
     query = request.form["queryText"]
-    # parse(query)
+    bounds = parse(query)[0]
     explanation = [
         "Anthony is a google intern",
         "Anthony is a fb intern",
         "Anthony is an apple intern",
     ]
-    return render_template("index.html", query=query, explanation=explanation)
+    return render_template(
+        "index.html", query=query, explanation=explanation, bounds=bounds
+    )
 
 
 @app.route("/test_explain", methods=["GET"])
