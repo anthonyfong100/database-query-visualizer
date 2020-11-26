@@ -1,11 +1,11 @@
-import time
-
-import psycopg2
 from flask import Flask, redirect, render_template, request, url_for
 
-from sql_parser.main import parse
+from query_analyzer.queryrunner import QueryRunner
+
+# from sql_parser.main import parse
 
 app = Flask(__name__)
+query_runner = QueryRunner()
 
 
 @app.route("/", methods=["GET"])
@@ -18,7 +18,7 @@ def explain():
     if request.method == "GET":
         return redirect("/")
     query = request.form["queryText"]
-    parse(query)
+    # parse(query)
     explanation = [
         "Anthony is a google intern",
         "Anthony is a fb intern",
@@ -29,20 +29,7 @@ def explain():
 
 @app.route("/test_explain", methods=["GET"])
 def test_explain():
-    host = "localhost"
-    port = "5432"
-    dbname = "picasso"
-    user = "postgres"
-    password = "postgres"
-    conn_string = "host='%s' port='%s' dbname='%s' user='%s' password='%s'" % (
-        host,
-        port,
-        dbname,
-        user,
-        password,
-    )
-    conn = psycopg2.connect(conn_string)
-    cursor = conn.cursor()
+    print("test explain endpoint hit")
     query = """select
     s_name,
     count(*) as numwait
@@ -81,10 +68,7 @@ group by
 order by
     numwait desc,
     s_name"""
-    cursor.execute("EXPLAIN (FORMAT JSON) " + query)
-    plan = cursor.fetchall()
-    query_plan = plan[0][0][0]["Plan"]
-    return query_plan
+    return query_runner.explain(query).root.raw_json
 
 
 if __name__ == "__main__":

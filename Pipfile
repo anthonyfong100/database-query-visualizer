@@ -8,10 +8,14 @@ black = "*"
 isort = "*"
 pre-commit = "*"
 flake8 = "*"
+pytest = "*"
 
 [packages]
 flask = "*"
 psycopg2-binary = "*"
+networkx = "*"
+matplotlib = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.7"
@@ -21,3 +25,4 @@ allow_prereleases = true
 
 [scripts]
 start = "bash -c 'python client.py'"
+test = "pytest tests -sv"
