@@ -7,9 +7,8 @@ services:
   tcph-db:
     image: postgres
     container_name: tcph-db
-    environment:
-      POSTGRES_USERNAME: postgres
-      POSTGRES_PASSWORD: password
+    env_file:
+      - .envs/dev.env
     volumes:
       - ./sql/data:/tmp/data
       - pgdata:/var/lib/postgresql/data
@@ -26,10 +25,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      DATABASE_URI: postgresql://postgres:password@tcph-db/postgres
+    env_file:
+      - .envs/dev.env
     ports:
       - "5000:5000"
     depends_on:
       - tcph-db
+    volumes:
+      - .:/app
     restart: "always"
