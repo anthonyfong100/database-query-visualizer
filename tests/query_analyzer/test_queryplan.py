@@ -35,6 +35,6 @@ class TestQueryPlan(unittest.TestCase):
         self.assertEqual(len(self.query_plan_single.graph.nodes), 1)
         self.assertEqual(len(self.query_plan_single.graph.edges), 0)
 
-    def calculate_total_cost(self):
+    def test_calculate_total_cost(self):
         self.assertEqual(self.query_plan_nested.calculate_total_cost(), 330)
         self.assertEqual(self.query_plan_single.calculate_total_cost(), 10)
