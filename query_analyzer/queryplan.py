@@ -1,5 +1,9 @@
+import os
+import time
+
 import matplotlib.pyplot as plt
 import networkx as nx
+from config.base import project_root
 
 from query_analyzer.explainer import Explainer
 from query_analyzer.explainers.test_explain import test_explain
@@ -50,7 +54,9 @@ class QueryPlan:
     def calculate_total_cost(self):
         return sum([x.cost for x in self.graph.nodes])
 
-    def save_graph_file(self, filename: str) -> None:
+    def save_graph_file(self) -> str:
+        graph_name = f"graph_{str(time.time())}.png"
+        filename = os.path.join(project_root, "static", graph_name)
         plot_formatter_position = get_tree_node_pos(self.graph, self.root)
         node_labels = {x: str(x) for x in self.graph.nodes}
         nx.draw(
@@ -58,10 +64,11 @@ class QueryPlan:
             plot_formatter_position,
             with_labels=True,
             labels=node_labels,
-            node_size=1500,
+            font_size=6,
+            node_size=300,
             node_color="skyblue",
             node_shape="s",
             alpha=1,
-            linewidths=40,
         )
         plt.savefig(filename)
+        return graph_name

@@ -1,10 +1,13 @@
+import os
 import random
+from typing import List
 
 import networkx as nx
+from config.base import project_root
 
 
 def get_tree_node_pos(
-    G, root=None, width=1.0, vert_gap=0.2, vert_loc=0, xcenter=0.5
+    G, root=None, width=1.0, height=1, vert_gap=0.1, vert_loc=0, xcenter=0.5
 ):
 
     """
@@ -45,15 +48,22 @@ def get_tree_node_pos(
         else:
             root = random.choice(list(G.nodes))
 
+    path_dict = dict(nx.all_pairs_shortest_path(G))
+    max_height = 0
+    for value in path_dict.values():
+        max_height = max(max_height, len(value))
+    vert_gap = height / max_height
+
     def _hierarchy_pos(
         G,
         root,
-        width=1.0,
-        vert_gap=0.2,
-        vert_loc=0,
-        xcenter=0.5,
+        width,
+        vert_gap,
+        vert_loc,
+        xcenter,
         pos=None,
         parent=None,
+        min_dx=0.05,
     ):
         """
         see hierarchy_pos docstring for most arguments
@@ -71,8 +81,8 @@ def get_tree_node_pos(
         if not isinstance(G, nx.DiGraph) and parent is not None:
             children.remove(parent)
         if len(children) != 0:
-            dx = width / len(children)
-            nextx = xcenter - width / 2 - dx / 2
+            dx = max(min_dx, width / len(children))
+            nextx = xcenter - width / 2 - max(min_dx, dx / 2)
             for child in children:
                 nextx += dx
                 pos = _hierarchy_pos(
@@ -88,3 +98,12 @@ def get_tree_node_pos(
         return pos
 
     return _hierarchy_pos(G, root, width, vert_gap, vert_loc, xcenter)
+
+
+def clean_up_static_dir(ignore_list: List[str]):
+    static_dir = os.path.join(project_root, "static")
+    for filename in os.listdir(static_dir):
+        if (
+            filename.startswith("graph_") and filename not in ignore_list
+        ):  # not to remove other images
+            os.remove(os.path.join(static_dir, filename))

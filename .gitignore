@@ -152,3 +152,6 @@ dmypy.json
 
 # ignore sql data
 sql/data/
+
+# ignore generated data
+static/graph*
