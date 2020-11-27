@@ -3,7 +3,6 @@ from flask import Flask, redirect, render_template, request, url_for
 import config.base
 from query_analyzer.queryrunner import QueryRunner
 from query_analyzer.utils import clean_up_static_dir
-
 from sql_parser.main import findBounds
 
 app = Flask(__name__)
@@ -21,8 +20,8 @@ def explain():
         return redirect("/")
 
     query = request.form["queryText"]
-    bounds = findBounds(query)
-    print(bounds)
+    # bounds = findBounds(query)
+    # print(bounds)
     explanation = [
         "Anthony is a google intern",
         "Anthony is a fb intern",

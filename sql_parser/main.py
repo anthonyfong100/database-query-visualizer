@@ -1,9 +1,11 @@
+import os
+import re
+
 import postgresql
 from psycopg2 import connect, sql
-import re
-import os
 
 
+# TODO: FIX THIS TO USE queryrunner instance to run commands
 def findBounds(query):
     conn = connect(
         dbname=os.getenv("POSTGRES_DBNAME"),
