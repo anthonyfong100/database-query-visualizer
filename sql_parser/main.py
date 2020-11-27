@@ -53,10 +53,4 @@ def parse(query):
 
         bounds.append(temp_bounds)
 
-        # runAnalyseMaxQuery = "SELECT MAX(" + column + ")" + " FROM " + table
-        # runAnalyseMax = db.prepare(runAnalyseMaxQuery)
-        # runAnalyseMinQuery = "SELECT MIN(" + column + ")" + " FROM " + table
-        # runAnalyseMin = db.prepare(runAnalyseMinQuery)
-
-    # TODO: using min and max values of each column, split into 10 buckets and generate 10 different queries
     return bounds
