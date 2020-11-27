@@ -4,7 +4,7 @@ import config.base
 from query_analyzer.queryrunner import QueryRunner
 from query_analyzer.utils import clean_up_static_dir
 
-# from sql_parser.main import parse
+from sql_parser.main import findBounds
 
 app = Flask(__name__)
 query_runner = QueryRunner()
@@ -20,6 +20,9 @@ def explain():
     if request.method == "GET":
         return redirect("/")
 
+    query = request.form["queryText"]
+    bounds = findBounds(query)
+    print(bounds)
     explanation = [
         "Anthony is a google intern",
         "Anthony is a fb intern",

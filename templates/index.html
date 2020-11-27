@@ -28,7 +28,9 @@ content %}
           <code>VARY()</code> only works on numerical columns.
         </p>
         <span>Example:</span>
-        <code>SELECT * FROM students WHERE VARY(gpa)</code>
+        <code>
+          SELECT * FROM lineitem WHERE VARY(l_quantity) 
+        </code>
         <p class="mt-3">
           The engine will vary the gpa based on its statistical distribution and
           conduct queries with different values.
