@@ -35,3 +35,6 @@ class QueryRunner:
     ) -> List[QueryPlan]:
         query_plans = [self.explain(plan) for plan in plans]
         return sorted(query_plans, **kwargs)[:topK]
+
+
+query_runner = QueryRunner()

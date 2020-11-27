@@ -1,12 +1,11 @@
 from flask import Flask, redirect, render_template, request, url_for
 
 import config.base
-from query_analyzer.queryrunner import QueryRunner
+from query_analyzer.queryrunner import query_runner
 from query_analyzer.utils import clean_up_static_dir
 from sql_parser.main import findBounds
 
 app = Flask(__name__)
-query_runner = QueryRunner()
 
 
 @app.route("/", methods=["GET"])
