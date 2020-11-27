@@ -1,12 +1,20 @@
-# import postgresql
-import psycopg2
+import postgresql
+from psycopg2 import connect, sql
 import re
+import os
 
 
 def findBounds(query):
-    conn = psycopg2.connect("dbname=TPC-H user=postgres")
+    conn = connect(
+        dbname=os.getenv("POSTGRES_DBNAME"),
+        user=os.getenv("POSTGRES_USERNAME"),
+        # password=os.getenv("POSTGRES_PASSWORD"),
+        host=os.getenv("POSTGRES_HOST"),
+        port=os.getenv("POSTGRES_PORT"),
+    )
     cur = conn.cursor()
-    # db = postgresql.open("pq://postgres@127.0.0.1:5432/TPC-H")
+
+    debugPG = postgresql.open("pq://postgres@localhost:5432/TPC-H")
 
     columns = []
 
@@ -21,21 +29,39 @@ def findBounds(query):
         query = query[:start] + res + query[start + end + 1 :]
         count += 1
 
-    print(columns)
-    # queries = []
-
     bounds = []
 
     for column in columns:
         # Find table names that the columns can be found in
-        findTableQuery = (
+        # findTableQuery = sql.SQL(
+        #     "select t.table_schema, t.table_name from information_schema.tables t inner join information_schema.columns c on c.table_name = t.table_name and c.table_schema = t.table_schema where c.column_name = '"
+        #     + column
+        #     + "' and t.table_schema not in ('information_schema', 'pg_catalog') and t.table_type = 'BASE TABLE' order by t.table_schema;"
+        # )
+
+        debugQuery = debugPG.prepare(
             "select t.table_schema, t.table_name from information_schema.tables t inner join information_schema.columns c on c.table_name = t.table_name and c.table_schema = t.table_schema where c.column_name = '"
             + column
             + "' and t.table_schema not in ('information_schema', 'pg_catalog') and t.table_type = 'BASE TABLE' order by t.table_schema;"
         )
+        table = debugQuery()[0][1]
+        print(table)
 
-        cur.execute(findTableQuery)
-        table = cur.fetchall()[0][1]
+        # cur.execute("""
+        #     select t.table_schema, t.table_name
+        #     from information_schema.tables t
+        #     inner join information_schema.columns c on c.table_name = t.table_name and c.table_schema = t.table_schema
+        #     where c.column_name = (%s)
+        #     and t.table_schema not in ('information_schema', 'pg_catalog') and t.table_type = 'BASE TABLE' order by t.table_schema;
+        #     """,
+        #     (column,)
+        # )
+        # table = (cur.fetchall())
+
+        if len(table) == 0:
+            continue
+
+        # table = cur.fetchall()[0][1]
 
         # analyze column with psycopg2
         col_query = (
@@ -53,4 +79,5 @@ def findBounds(query):
 
         bounds.append(temp_bounds)
 
-    return {bounds: bounds, query: query}
+    # return {bounds: bounds, query: query}
+    return bounds
