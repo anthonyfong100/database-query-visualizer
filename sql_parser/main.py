@@ -53,4 +53,4 @@ def parse(query):
 
         bounds.append(temp_bounds)
 
-    return bounds
+    return bounds  # need to return list of queries also
