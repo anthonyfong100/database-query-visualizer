@@ -1,9 +1,9 @@
-import postgresql
+# import postgresql
 import psycopg2
 import re
 
 
-def parse(query):
+def findBounds(query):
     conn = psycopg2.connect("dbname=TPC-H user=postgres")
     cur = conn.cursor()
     # db = postgresql.open("pq://postgres@127.0.0.1:5432/TPC-H")
@@ -53,4 +53,4 @@ def parse(query):
 
         bounds.append(temp_bounds)
 
-    return bounds  # need to return list of queries also
+    return {bounds: bounds, query: query}

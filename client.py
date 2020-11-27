@@ -2,7 +2,7 @@ from flask import Flask, redirect, render_template, request, url_for
 
 from query_analyzer.queryrunner import QueryRunner
 
-# from sql_parser.main import parse
+from sql_parser.main import findBounds
 
 app = Flask(__name__)
 query_runner = QueryRunner()
@@ -17,9 +17,10 @@ def home():
 def explain():
     if request.method == "GET":
         return redirect("/")
-      
+
     query = request.form["queryText"]
-    bounds = parse(query)[0]
+    bounds = findBounds(query)
+    print(bounds)
     explanation = [
         "Anthony is a google intern",
         "Anthony is a fb intern",
