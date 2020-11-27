@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template, request, url_for
 
+import config.base
 from query_analyzer.queryrunner import QueryRunner
 
 from sql_parser.main import findBounds

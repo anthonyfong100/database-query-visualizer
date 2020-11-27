@@ -1,7 +1,9 @@
+import matplotlib.pyplot as plt
 import networkx as nx
 
 from query_analyzer.explainer import Explainer
 from query_analyzer.explainers.test_explain import test_explain
+from query_analyzer.utils import get_tree_node_pos
 
 
 class Node:
@@ -10,6 +12,10 @@ class Node:
         self.cost = query_plan["Total Cost"]
         self.raw_json = query_plan
         self.explanation = self.create_explanation(query_plan)
+
+    def __str__(self):
+        name_string = f"{self.node_type}\ncost: {self.cost}"
+        return name_string
 
     @staticmethod
     def create_explanation(query_plan):
@@ -44,5 +50,18 @@ class QueryPlan:
     def calculate_total_cost(self):
         return sum([x.cost for x in self.graph.nodes])
 
-    def display_graph(self):
-        nx.draw(self.graph, with_labels=True, font_weight="bold")
+    def save_graph_file(self, filename: str) -> None:
+        plot_formatter_position = get_tree_node_pos(self.graph, self.root)
+        node_labels = {x: str(x) for x in self.graph.nodes}
+        nx.draw(
+            self.graph,
+            plot_formatter_position,
+            with_labels=True,
+            labels=node_labels,
+            node_size=1500,
+            node_color="skyblue",
+            node_shape="s",
+            alpha=1,
+            linewidths=40,
+        )
+        plt.savefig(filename)
