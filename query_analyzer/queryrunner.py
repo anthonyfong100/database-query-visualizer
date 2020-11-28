@@ -58,19 +58,19 @@ class QueryRunner:
 
         table = res[0][1]
 
-        oldLevel = self.conn.isolation_level
-        self.conn.set_isolation_level(0)
-        analyzeQuery = sql.SQL(
-            """
-            VACUUM ANALYZE {queryTable} ({queryColumn});
-            """
-        ).format(
-            queryTable=sql.Identifier(table),
-            queryColumn=sql.Identifier(column),
-        )
+        # oldLevel = self.conn.isolation_level
+        # self.conn.set_isolation_level(0)
+        # analyzeQuery = sql.SQL(
+        #     """
+        #     VACUUM ANALYZE {queryTable} ({queryColumn});
+        #     """
+        # ).format(
+        #     queryTable=sql.Identifier(table),
+        #     queryColumn=sql.Identifier(column),
+        # )
 
-        self.cursor.execute(analyzeQuery)
-        self.conn.set_isolation_level(oldLevel)
+        # self.cursor.execute(analyzeQuery)
+        # self.conn.set_isolation_level(oldLevel)
 
         return table
 
@@ -82,7 +82,7 @@ class QueryRunner:
 
         # analyze column with psycopg2
         col_query = (
-            "select * from pg_stats where tablename='{}' and attname='{}'"
+            "SELECT * FROM pg_stats WHERE tablename='{}' and attname='{}'"
         ).format(table, column)
         self.cursor.execute(col_query)
         analyze_fetched = self.cursor.fetchall()[0]
@@ -101,6 +101,36 @@ class QueryRunner:
             reduced_bounds.append(full_bounds[i])
 
         return reduced_bounds
-      
+
+    def find_alt_partitions(self, table: str, column: str) -> list:
+        col_query = (
+            "SELECT * FROM pg_stats WHERE tablename='{}' and attname='{}'"
+        ).format(table, column)
+        self.cursor.execute(col_query)
+        analyze_fetched = self.cursor.fetchall()[0]
+
+        # separate histogram bounds from pg_stats into 10 buckets
+        distinct = analyze_fetched[6]
+
+        # if theres 10 or less distinct values, no need for bucket creation
+        if 0 <= distinct <= 10:
+            dist_query = ("SELECT DISTINCT {} FROM {};").format(column, table)
+            self.cursor.execute(dist_query)
+            distinct_vals = self.cursor.fetchall()
+
+            return [val[0] for val in distinct_vals]
+
+        min_query = ("SELECT MIN({}) FROM {}").format(column, table)
+        max_query = ("SELECT MAX({}) FROM {}").format(column, table)
+
+        self.cursor.execute(min_query)
+        min_res = self.cursor.fetchall()[0][0]
+
+        self.cursor.execute(max_query)
+        max_res = self.cursor.fetchall()[0][0]
+
+        inc = (max_res - min_res) / 10
+        return [min_res + inc * i for i in range(1, 11)]
+
 
 query_runner = QueryRunner()

@@ -7,6 +7,7 @@ from psycopg2 import connect, sql
 def parse(query):
 
     columns = []
+    res = {"bounds": {}, "query": query, "error": False}
 
     # Replace all occurences of VARY(X) with x < $i, where i is the placeholder counter
     while query.find("VARY") != -1:
@@ -17,15 +18,22 @@ def parse(query):
         columns.append(subStr[5:end])
         query = query[:start] + res + query[start + end + 1 :]
 
-    bounds = []
-
     for column in columns:
+        table = query_runner.find_table(column)
         temp_bounds = query_runner.find_bounds(column)
 
+        if not table:
+            res["error"] = True
+            return res
+
         # create buckets using min max
-        if not temp_bounds:
+        if not temp_bounds and table:
+            res["bounds"][column] = query_runner.find_alt_partitions(
+                table, column
+            )
             continue
 
-        bounds.append(temp_bounds)
+        res["bounds"][column] = temp_bounds
 
-    return bounds
+    print(res)
+    return res
