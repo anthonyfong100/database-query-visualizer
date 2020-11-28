@@ -1,4 +1,3 @@
-# TODO: FIX THIS some of the imports here are wrong
 from query_analyzer.explainers.aggregate_explain import aggregate_explain
 from query_analyzer.explainers.append_explain import append_explain
 from query_analyzer.explainers.cte_explain import cte_explain
