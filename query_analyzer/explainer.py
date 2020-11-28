@@ -45,9 +45,10 @@ class Explainer(object):
         "Test": test_explain,
         "Values Scan": values_scan_explain,
         "Seq Scan": seq_scan_explain,
-        "Merge Join": merge_join_explain,
         "Nested Loop": nested_loop_explain,
         "Sort": sort_explain,
+        "Hash": hash_explain,
+        "Hash Join": hash_join_explain,
     }
 
 
