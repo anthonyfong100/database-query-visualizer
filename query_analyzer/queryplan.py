@@ -25,9 +25,7 @@ class Node:
         self.explanation = self.create_explanation(query_plan)
 
     def __str__(self):
-        name_string = (
-            f"{self.node_type}\ncost: {self.cost}\nplan rows:{self.plan_rows}"
-        )
+        name_string = f"{self.node_type}\ncost: {self.cost}"
         return name_string
 
     @staticmethod
