@@ -21,7 +21,13 @@ def parse(query):
     bounds = []
 
     for column in columns:
-        bounds.append(query_runner.fetch_bounds(column))
+        temp_bounds = query_runner.find_bounds(column)
+
+        # create buckets using min max
+        if not temp_bounds:
+            continue
+
+        bounds.append(temp_bounds)
 
     return bounds
 

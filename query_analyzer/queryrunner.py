@@ -1,7 +1,7 @@
 import os
 from typing import Any, Callable, List, Optional
 
-import psycopg2
+from psycopg2 import connect, sql
 
 from query_analyzer.queryplan import QueryPlan
 
@@ -12,7 +12,7 @@ class QueryRunner:
         self.cursor = self.conn.cursor()
 
     def set_up_db_connection(self):
-        return psycopg2.connect(
+        return connect(
             dbname=os.getenv("POSTGRES_DBNAME"),
             user=os.getenv("POSTGRES_USERNAME"),
             password=os.getenv("POSTGRES_PASSWORD"),
@@ -38,19 +38,47 @@ class QueryRunner:
 
     def find_table(self, column: str) -> str:
         # Find table names that the columns can be found in
-        findTableQuery = (
-            "select t.table_schema, t.table_name from information_schema.tables t inner join information_schema.columns c on c.table_name = t.table_name and c.table_schema = t.table_schema where c.column_name = '"
-            + column
-            + "' and t.table_schema not in ('information_schema', 'pg_catalog') and t.table_type = 'BASE TABLE' order by t.table_schema;"
+        findTableQuery = sql.SQL(
+            """
+            SELECT t.table_schema, t.table_name FROM information_schema.tables t
+            inner join information_schema.columns c on c.table_name = t.table_name
+            and c.table_schema = t.table_schema where c.column_name = %s
+            and t.table_schema not in ('information_schema', 'pg_catalog')
+            and t.table_type = 'BASE TABLE' order by t.table_schema;
+            """
         )
 
-        self.cursor.execute(findTableQuery)
-        table = self.cursor.fetchall()[0][1]
+        self.cursor.execute(findTableQuery, [column])
+
+        res = self.cursor.fetchall()
+
+        # Nothing found
+        if len(res) == 0:
+            return None
+
+        table = res[0][1]
+
+        oldLevel = self.conn.isolation_level
+        self.conn.set_isolation_level(0)
+        analyzeQuery = sql.SQL(
+            """
+            VACUUM ANALYZE {queryTable} ({queryColumn});
+            """
+        ).format(
+            queryTable=sql.Identifier(table),
+            queryColumn=sql.Identifier(column),
+        )
+
+        self.cursor.execute(analyzeQuery)
+        self.conn.set_isolation_level(oldLevel)
 
         return table
 
-    def fetch_bounds(self, column: str) -> List[str]:
+    def find_bounds(self, column: str) -> list:
         table = self.find_table(column)
+
+        if not table:
+            return None
 
         # analyze column with psycopg2
         col_query = (
@@ -61,7 +89,13 @@ class QueryRunner:
 
         # separate histogram bounds from pg_stats into 10 buckets
         reduced_bounds = []
-        full_bounds = analyze_fetched[9][1:-1].split(",")
+        full_bounds = analyze_fetched[9]
+
+        # return None if no bounds found
+        if not full_bounds:
+            return None
+
+        full_bounds = full_bounds[1:-1].split(",")
         inc = len(full_bounds) // 10
         for i in range(inc, len(full_bounds), inc):
             reduced_bounds.append(full_bounds[i])
