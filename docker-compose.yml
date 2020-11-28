@@ -20,6 +20,7 @@ services:
       - ./sql/scripts/create_customer.sql:/docker-entrypoint-initdb.d/6-create_customer.sql
       - ./sql/scripts/create_orders.sql:/docker-entrypoint-initdb.d/7-create_orders.sql
       - ./sql/scripts/create_lineitem.sql:/docker-entrypoint-initdb.d/8-create_lineitem.sql
+      - ./sql/scripts/analyze.sql:/docker-entrypoint-initdb.d/9-analyze.sql
 
   query-visualiser:
     build:
