@@ -16,7 +16,6 @@ psycopg2-binary = "*"
 networkx = "*"
 matplotlib = "*"
 python-dotenv = "*"
-py-postgresql = "*"
 
 [requires]
 python_version = "3.7"
