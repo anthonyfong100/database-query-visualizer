@@ -6,7 +6,7 @@ import networkx as nx
 from config.base import project_root
 
 # TODO uncomment this after fixing the explainer class
-# from query_analyzer.explainer import Explainer
+from query_analyzer.explainer import Explainer
 from query_analyzer.explainers.test_explain import test_explain
 from query_analyzer.utils import get_tree_node_pos
 
