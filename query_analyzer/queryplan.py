@@ -1,10 +1,11 @@
 import os
 import time
+from typing import List
 
 import matplotlib.pyplot as plt
 import networkx as nx
 from config.base import project_root
-from typing import List
+
 from query_analyzer.explainer import Explainer
 from query_analyzer.explainers.default_explain import default_explain
 from query_analyzer.utils import get_tree_node_pos
