@@ -3,7 +3,8 @@ from flask import Flask, redirect, render_template, request, url_for
 import config.base
 from query_analyzer.queryrunner import query_runner
 from query_analyzer.utils import clean_up_static_dir
-from sql_parser.main import findBounds
+
+# from sql_parser.main import findBounds
 
 app = Flask(__name__)
 
@@ -21,12 +22,21 @@ def explain():
     query = request.form["queryText"]
     # bounds = findBounds(query)
     # print(bounds)
-    explanation = [
+    explanation_1 = [
         "Anthony is a google intern",
         "Anthony is a fb intern",
         "Anthony is an apple intern",
     ]
-
+    explanation_2 = [
+        "Anthony is a google intern",
+        "Anthony is a fb intern",
+        "Anthony is an apple intern",
+    ]
+    explanation_3 = [
+        "Anthony is a google intern",
+        "Anthony is a fb intern",
+        "Anthony is an apple intern",
+    ]
     query = """select
         s_name,
         count(*) as numwait
@@ -82,11 +92,13 @@ def explain():
 
     html_context = {
         "query": query,
-        "explanation": explanation,
         "bounds": bounds,
         "graph_1": graph_file_name[0],
         "graph_2": graph_file_name[1],
         "graph_3": graph_file_name[2],
+        "explanation_1": explanation_1,
+        "explanation_2": explanation_2,
+        "explanation_3": explanation_3,
     }
 
     return render_template("index.html", **html_context)
