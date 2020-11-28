@@ -1,4 +1,3 @@
-# TODO: FIX THIS some of the imports here are wrong
 from query_analyzer.explainers.aggregate_explain import aggregate_explain
 from query_analyzer.explainers.append_explain import append_explain
 from query_analyzer.explainers.cte_explain import cte_explain
@@ -24,7 +23,7 @@ from query_analyzer.explainers.subquery_scan_explain import (
 )
 from query_analyzer.explainers.test_explain import test_explain
 from query_analyzer.explainers.unique_explain import unique_explain
-from query_analyzer.explainers.value_scan_explain import value_scan_explain
+from query_analyzer.explainers.values_scan_explain import values_scan_explain
 
 
 class Explainer(object):
@@ -44,9 +43,14 @@ class Explainer(object):
         "SetOp": setop_explain,
         "Subquery Scan": subquery_scan_explain,
         "Test": test_explain,
-        "Values Scan": value_scan_explain,
+        "Values Scan": values_scan_explain,
         "Seq Scan": seq_scan_explain,
-        "Merge Join": merge_join_explain,
         "Nested Loop": nested_loop_explain,
         "Sort": sort_explain,
+        "Hash": hash_explain,
+        "Hash Join": hash_join_explain,
     }
+
+
+if __name__ == "__main__":
+    print(Explainer.explainer_map)

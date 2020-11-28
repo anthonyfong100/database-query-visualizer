@@ -1,4 +1,4 @@
-def index_scan_parser(query_plan):
+def index_scan_explain(query_plan):
     result = ""
     result += "An index scan is done using an index table "+ query_plan["Index Name"]
     if "Index Cond" in query_plan:
@@ -9,7 +9,7 @@ def index_scan_parser(query_plan):
         result += " The result is then filtered by "+ query_plan["Filter"].replace('::text', '') +"."
     return result
 
-def index_only_scan_parser(query_plan):
+def index_only_scan_explain(query_plan):
     result = ""
     result += "iAn index scan is done using an index table "+ query_plan["Index Name"]
     if "Index Cond" in query_plan:
