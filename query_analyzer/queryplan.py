@@ -84,4 +84,8 @@ class QueryPlan:
         if not node.has_children:
             return [node.explanation]
         else:
-            return [self.create_explanation(child) for child in self.graph[node]] + [node.explanation]
+            result = []
+            for child in self.graph[node]:
+                result += self.create_explanation(child)
+            result += [node.explanation]
+            return result
