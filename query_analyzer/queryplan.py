@@ -1,6 +1,11 @@
+import os
+import time
+
 import matplotlib.pyplot as plt
 import networkx as nx
+from config.base import project_root
 
+# TODO uncomment this after fixing the explainer class
 from query_analyzer.explainer import Explainer
 from query_analyzer.explainers.test_explain import test_explain
 from query_analyzer.utils import get_tree_node_pos
@@ -11,17 +16,17 @@ class Node:
         self.node_type = query_plan["Node Type"]
         self.cost = query_plan["Total Cost"]
         self.raw_json = query_plan
-        self.explanation = self.create_explanation(query_plan)
+        # self.explanation = self.create_explanation(query_plan)
 
     def __str__(self):
         name_string = f"{self.node_type}\ncost: {self.cost}"
         return name_string
 
-    @staticmethod
-    def create_explanation(query_plan):
-        node_type = query_plan["Node Type"]
-        explainer = Explainer.explainer_map.get(node_type, test_explain)
-        return explainer(query_plan)
+    # @staticmethod
+    # def create_explanation(query_plan):
+    #     node_type = query_plan["Node Type"]
+    #     explainer = Explainer.explainer_map.get(node_type, test_explain)
+    #     return explainer(query_plan)
 
     def has_children(self) -> bool:
         return "Plans" in self.raw_json
@@ -50,7 +55,9 @@ class QueryPlan:
     def calculate_total_cost(self):
         return sum([x.cost for x in self.graph.nodes])
 
-    def save_graph_file(self, filename: str) -> None:
+    def save_graph_file(self) -> str:
+        graph_name = f"graph_{str(time.time())}.png"
+        filename = os.path.join(project_root, "static", graph_name)
         plot_formatter_position = get_tree_node_pos(self.graph, self.root)
         node_labels = {x: str(x) for x in self.graph.nodes}
         nx.draw(
@@ -58,10 +65,11 @@ class QueryPlan:
             plot_formatter_position,
             with_labels=True,
             labels=node_labels,
-            node_size=1500,
+            font_size=6,
+            node_size=300,
             node_color="skyblue",
             node_shape="s",
             alpha=1,
-            linewidths=40,
         )
         plt.savefig(filename)
+        return graph_name

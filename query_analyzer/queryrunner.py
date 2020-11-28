@@ -101,6 +101,6 @@ class QueryRunner:
             reduced_bounds.append(full_bounds[i])
 
         return reduced_bounds
-
+      
 
 query_runner = QueryRunner()

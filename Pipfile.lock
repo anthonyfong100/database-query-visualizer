@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "589bc28b3946ae0aa53c522f4bafaa7329cc3248962a65f5b01036cb27a7a3fc"
+            "sha256": "19f626ae3f8a84d1743882822c87d3800b41f2193a1d0a9420030e4f17db5ee1"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -274,6 +274,13 @@
             ],
             "index": "pypi",
             "version": "==2.8.6"
+        },
+        "py-postgresql": {
+            "hashes": [
+                "sha256:321a40123ee4a2afd07d26b96f466302308d709f71b4a71baa60468b0ed281d3"
+            ],
+            "index": "pypi",
+            "version": "==1.2.2"
         },
         "pyparsing": {
             "hashes": [

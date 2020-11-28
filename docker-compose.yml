@@ -25,7 +25,7 @@ services:
   query-visualiser:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: ./.docker/Dockerfile
     env_file:
       - .envs/dev.env
     ports:

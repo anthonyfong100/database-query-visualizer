@@ -3,31 +3,19 @@ content %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Query Plan</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarSupportedContent"
-    aria-controls="navbarSupportedContent"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
-  >
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 </nav>
-<div class="container">
+<div class="px-5">
   <div class="row mt-3">
-    <div class="col-6">
+    <div class="col-4">
       <form method="POST" action="/result">
         <div class="form-group">
           <label for="queryTextArea">Insert Query</label>
-          <textarea
-            class="form-control"
-            id="queryTextArea"
-            name="queryText"
-            rows="10"
-            placeholder="Type your SQL query here"
-          ></textarea>
+          <textarea class="form-control" id="queryTextArea" name="queryText" rows="10"
+            placeholder="Type your SQL query here"></textarea>
         </div>
         <button id="btnFetch" type="submit" class="btn btn-primary">
           Submit
@@ -40,14 +28,16 @@ content %}
           <code>VARY()</code> only works on numerical columns.
         </p>
         <span>Example:</span>
-        <code>SELECT * FROM students WHERE VARY(gpa)</code>
+        <code>
+          SELECT * FROM lineitem WHERE VARY(l_quantity) 
+        </code>
         <p class="mt-3">
-          The engine will vary the gpa based on its statistical distribution and
+          The engine will vary the selectivity based on its statistical distribution and
           conduct queries with different values.
         </p>
       </form>
     </div>
-    <div class="col-6">
+    <div class="col-8">
       <h3>Query</h3>
       {% if query %}
       <code>{{query}}</code>
@@ -65,6 +55,9 @@ content %}
       {% else %}
       <span>Insert query to begin</span>
       {% endif %}
+      {% if graph_1 %}
+      <img src="{{ url_for('static', filename=graph_1) }}" width="600" height="400" />
+      {% endif %}
       <hr />
       <h3 class="mt-3">Query Plan 2</h3>
       {% if explanation %}
@@ -76,6 +69,9 @@ content %}
       {% else %}
       <span>Insert query to begin</span>
       {% endif %}
+      {% if graph_2 %}
+      <img src="{{ url_for('static', filename=graph_2) }}" width="600" height="400" />
+      {% endif %}
       <hr />
       <h3 class="mt-3">Query Plan 3</h3>
       {% if explanation %}
@@ -86,6 +82,9 @@ content %}
       </ol>
       {% else %}
       <span>Insert query to begin</span>
+      {% endif %}
+      {% if graph_3 %}
+      <img src="{{ url_for('static', filename=graph_3) }}" width="600" height="400" />
       {% endif %}
       <hr />
       <h3 class="mt-3">Histogram Bounds</h3>
