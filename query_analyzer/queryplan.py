@@ -15,11 +15,20 @@ class Node:
     def __init__(self, query_plan):
         self.node_type = query_plan["Node Type"]
         self.cost = query_plan["Total Cost"]
+        self.parent_relationship = query_plan.get("Parent Relationship")
+        self.relation = query_plan.get("Relation Name")
+        self.alias = query_plan.get("Alias")
+        self.startup_cost = query_plan.get("Startup Cost")
+        self.plan_rows = query_plan.get("Plan Rows")
+        self.plan_width = query_plan.get("Plan Width")
+        self.filter = query_plan.get("Filter")
         self.raw_json = query_plan
         # self.explanation = self.create_explanation(query_plan)
 
     def __str__(self):
-        name_string = f"{self.node_type}\ncost: {self.cost}"
+        name_string = (
+            f"{self.node_type}\ncost: {self.cost}\nplan rows:{self.plan_rows}"
+        )
         return name_string
 
     # @staticmethod
