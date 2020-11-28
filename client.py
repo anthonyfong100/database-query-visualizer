@@ -4,7 +4,7 @@ import config.base
 from query_analyzer.queryrunner import query_runner
 from query_analyzer.utils import clean_up_static_dir
 from sql_parser.main import findBounds
-from sql_parser.premutate import permutate
+from sql_parser.permutate import permutate
 
 app = Flask(__name__)
 
