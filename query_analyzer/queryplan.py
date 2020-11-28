@@ -5,28 +5,26 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from config.base import project_root
 
-# TODO uncomment this after fixing the explainer class
 from query_analyzer.explainer import Explainer
 from query_analyzer.explainers.test_explain import test_explain
 from query_analyzer.utils import get_tree_node_pos
-
 
 class Node:
     def __init__(self, query_plan):
         self.node_type = query_plan["Node Type"]
         self.cost = query_plan["Total Cost"]
         self.raw_json = query_plan
-        # self.explanation = self.create_explanation(query_plan)
+        self.explanation = self.create_explanation(query_plan)
 
     def __str__(self):
         name_string = f"{self.node_type}\ncost: {self.cost}"
         return name_string
 
-    # @staticmethod
-    # def create_explanation(query_plan):
-    #     node_type = query_plan["Node Type"]
-    #     explainer = Explainer.explainer_map.get(node_type, test_explain)
-    #     return explainer(query_plan)
+    @staticmethod
+    def create_explanation(query_plan):
+        node_type = query_plan["Node Type"]
+        explainer = Explainer.explainer_map.get(node_type, test_explain)
+        return explainer(query_plan)
 
     def has_children(self) -> bool:
         return "Plans" in self.raw_json
