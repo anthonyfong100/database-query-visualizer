@@ -6,7 +6,7 @@ import networkx as nx
 from config.base import project_root
 from typing import List
 from query_analyzer.explainer import Explainer
-from query_analyzer.explainers.test_explain import test_explain
+from query_analyzer.explainers.default_explain import default_explain
 from query_analyzer.utils import get_tree_node_pos
 
 
@@ -31,7 +31,7 @@ class Node:
     @staticmethod
     def create_explanation(query_plan):
         node_type = query_plan["Node Type"]
-        explainer = Explainer.explainer_map.get(node_type, test_explain)
+        explainer = Explainer.explainer_map.get(node_type, default_explain)
         return explainer(query_plan)
 
     def has_children(self):
