@@ -20,7 +20,7 @@ docker-compose build && docker-compose up
 ~~~
 Afterwards head to [url](http://localhost:5000/) 
 
-NOTE: The csv files are huge --> Make sure that your docker engine has around 10gb worth of free space if not the creation of postgres tables will fail
+NOTE: The csv files are huge --> Make sure that your docker engine has around 5gb worth of free space if not the creation of postgres tables will fail
 
 ## Local development
 >TLDR: Install pipenv, install precommit, download data
