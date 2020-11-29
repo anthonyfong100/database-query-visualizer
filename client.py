@@ -20,27 +20,13 @@ def explain():
         return redirect("/")
 
     query = request.form["queryText"]
-    res = parse(query)
-    bounds = res["bounds"]
-    queryFormatted = res["query"]
-    permutate(bounds, queryFormatted)
+    # res = parse(query)
+    # bounds = res["bounds"]
+    # queryFormatted = res["query"]
+    # permutate(bounds, queryFormatted)
 
     # print(bounds)
-    explanation_1 = [
-        "Anthony is a google intern",
-        "Anthony is a fb intern",
-        "Anthony is an apple intern",
-    ]
-    explanation_2 = [
-        "Anthony is a google intern",
-        "Anthony is a fb intern",
-        "Anthony is an apple intern",
-    ]
-    explanation_3 = [
-        "Anthony is a google intern",
-        "Anthony is a fb intern",
-        "Anthony is an apple intern",
-    ]
+    explanations = []
     query = """select
         s_name,
         count(*) as numwait
@@ -91,6 +77,7 @@ def explain():
     graph_file_name = []
     for plan in top_plans_by_cost:
         graph_file_name.append(plan.save_graph_file())
+        explanations.append(plan.create_explanation(plan.root))
 
     clean_up_static_dir(graph_file_name)
 
@@ -100,9 +87,9 @@ def explain():
         "graph_1": graph_file_name[0],
         "graph_2": graph_file_name[1],
         "graph_3": graph_file_name[2],
-        "explanation_1": explanation_1,
-        "explanation_2": explanation_2,
-        "explanation_3": explanation_3,
+        "explanation_1": explanations[0],
+        "explanation_2": explanations[1],
+        "explanation_3": explanations[2],
     }
 
     return render_template("index.html", **html_context)
