@@ -20,10 +20,10 @@ def explain():
         return redirect("/")
 
     query = request.form["queryText"]
-    # res = parse(query)
-    # bounds = res["bounds"]
-    # queryFormatted = res["query"]
-    # permutate(bounds, queryFormatted)
+    res = parse(query)
+    bounds = res["bounds"]
+    queryFormatted = res["query"]
+    queries = permutate(bounds, queryFormatted)
 
     # print(bounds)
     explanations = []
