@@ -39,12 +39,49 @@ pre-commit install
 Download data from [here](https://entuedu-my.sharepoint.com/:f:/g/personal/nlee016_e_ntu_edu_sg/Eu9asRzO8kVGkEYXAaafDbsBUCi4eUeKqyXawFfPnFoiog?e=O6jxY1)
 and extract them to `<project-root-folder-path>/sql/data/`
 
-## Pipenv guide
-Installing new dependencies
+Running the prohect:
+~~~
+python client.py 
+~~~
+
+
+## FAQS
+
+Q: How do i installing new dependencies?
 ~~~
 pipenv install <dependency> 
 pipenv install -d <dependency> 
-~~~
+
 The -d flag is used to specify development dependency
+~~~
+
+Q: How do i change which database the app points to?
+
+~~~
+Modify the .envs/dev.env file
+~~~
 
 
+Q: How do i set up the database for local testing?
+
+~~~
+Run the sql scripts in sql/scripts/ in the order :
+  1-create_region.sql
+  2-create_nation.sql
+  3-create_part.sql
+  4-create_supplier.sql
+  5-create_partsupp.sql
+  6-create_customer.sql
+  7-create_orders.sql
+  8-create_lineitem.sql
+  9-analyze.sql
+~~~
+
+
+Q: My docker-compose database seems to be hanging?
+~~~
+As we are initializing the database and copying over a large amount of data from the TPC-H sample data, this process might take anywhere from 1-5 minutes. 
+
+When the database copying is completed, the docker services should auto start.
+
+~~~
