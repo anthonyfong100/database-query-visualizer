@@ -26,7 +26,6 @@ def explain():
     # permutate(bounds, queryFormatted)
 
     # print(bounds)
-    explanations = []
     query = """select
         s_name,
         count(*) as numwait
@@ -75,9 +74,12 @@ def explain():
     )
 
     graph_file_name = []
+    total_costs = []
+    explanations = []
     for plan in top_plans_by_cost:
         graph_file_name.append(plan.save_graph_file())
         explanations.append(plan.create_explanation(plan.root))
+        total_costs.append(int(plan.calculate_total_cost()))
 
     clean_up_static_dir(graph_file_name)
 
@@ -90,6 +92,9 @@ def explain():
         "explanation_1": explanations[0],
         "explanation_2": explanations[1],
         "explanation_3": explanations[2],
+        "total_cost_1": total_costs[0],
+        "total_cost_2": total_costs[1],
+        "total_cost_3": total_costs[2],
     }
 
     return render_template("index.html", **html_context)
