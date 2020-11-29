@@ -51,7 +51,13 @@ class QueryRunner:
         self, plans: List[str], topK: int, **kwargs
     ) -> List[QueryPlan]:
         query_plans = [self.explain(plan) for plan in plans]
-        return sorted(query_plans, **kwargs)[:topK]
+        unique_query_plans = []
+        seen_query_plans = set()
+        for query_plan in query_plans:
+            if query_plan not in seen_query_plans:
+                unique_query_plans.append(query_plan)
+                seen_query_plans.add(query_plan)
+        return sorted(unique_query_plans, **kwargs)[:topK]
 
     @wrap_single_transaction
     def find_table(self, column: str) -> str:

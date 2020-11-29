@@ -59,6 +59,12 @@ class QueryPlan:
                 )  # add both curr_node and child_node if not present in graph
                 self._construct_graph(child_node)
 
+    def serialize_graph_operation(self) -> str:
+        node_list = [self.root.node_type]
+        for start, end in nx.edge_bfs(self.graph, self.root):
+            node_list.append(end.node_type)
+        return "#".join(node_list)
+
     def calculate_total_cost(self):
         return sum([x.cost for x in self.graph.nodes])
 
@@ -79,6 +85,7 @@ class QueryPlan:
             alpha=1,
         )
         plt.savefig(filename)
+        plt.clf()
         return graph_name
 
     def create_explanation(self, node: Node):
@@ -90,3 +97,14 @@ class QueryPlan:
                 result += self.create_explanation(child)
             result += [node.explanation]
             return result
+
+    def __eq__(self, obj):
+        return (
+            isinstance(obj, QueryPlan)
+            and obj.serialize_graph_operation()
+            == self.serialize_graph_operation()
+        )
+
+    def __hash__(self):
+        """Overrides the default implementation"""
+        return hash(self.serialize_graph_operation())
