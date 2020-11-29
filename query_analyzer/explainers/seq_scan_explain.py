@@ -2,7 +2,7 @@ from query_analyzer.explainers.color import bold_string
 
 
 def seq_scan_explain(query_plan):
-    sentence = "It does a sequential scan on relation "
+    sentence = f"It does a {bold_string('sequential scan')} on relation "
     if "Relation Name" in query_plan:
         sentence += bold_string(query_plan["Relation Name"])
     if "Alias" in query_plan:

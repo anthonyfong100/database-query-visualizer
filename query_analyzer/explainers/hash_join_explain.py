@@ -3,9 +3,7 @@ from query_analyzer.explainers.color import bold_string
 
 def hash_join_explain(query_plan):
     result = ""
-    result += "The result from previous operation is joined using Hash {} Join".format(
-        bold_string(query_plan["Join Type"])
-    )
+    result += f"The result from previous operation is joined using {bold_string('Hash')} {bold_string(query_plan['Join Type'])} {bold_string('Join')}"
     if "Hash Cond" in query_plan:
         result += " on the condition: {}".format(
             bold_string(query_plan["Hash Cond"].replace("::text", ""))

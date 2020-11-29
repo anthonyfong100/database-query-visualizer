@@ -2,7 +2,7 @@ from query_analyzer.explainers.color import bold_string
 
 
 def sort_explain(query_plan):
-    result = "The result is sorted using the attribute "
+    result = f"The result is {bold_string('sorted')} using the attribute "
     if "DESC" in query_plan["Sort Key"]:
         result += (
             bold_string(str(query_plan["Sort Key"].replace("DESC", "")))

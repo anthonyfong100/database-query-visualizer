@@ -3,7 +3,7 @@ from query_analyzer.explainers.color import bold_string
 
 def cte_explain(query_plan):
     result = (
-        "A CTE scan is performed on the table "
+        f"A {bold_string('CTE scan')} is performed on the table "
         + bold_string(str(query_plan["CTE Name"]))
         + " which is stored in memory "
     )

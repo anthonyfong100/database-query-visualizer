@@ -2,7 +2,7 @@ from query_analyzer.explainers.color import bold_string
 
 
 def merge_join_explain(query_plan):
-    result = "The results from sub-operations are joined using Merge Join"
+    result = f"The results from sub-operations are joined using {bold_string('Merge Join')}"
 
     if "Merge Cond" in query_plan:
         result += " with condition " + bold_string(

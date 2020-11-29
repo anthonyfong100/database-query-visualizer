@@ -3,8 +3,9 @@ from query_analyzer.explainers.color import bold_string
 
 def index_scan_explain(query_plan):
     result = ""
-    result += "An index scan is done using an index table " + bold_string(
-        query_plan["Index Name"]
+    result += (
+        f"An {bold_string('index scan')} is done using an index table "
+        + bold_string(query_plan["Index Name"])
     )
     if "Index Cond" in query_plan:
         result += " with the following conditions: " + bold_string(
