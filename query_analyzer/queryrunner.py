@@ -1,4 +1,5 @@
 import os
+from functools import wraps
 from typing import Any, Callable, List, Optional
 
 from psycopg2 import connect, sql
@@ -20,10 +21,26 @@ class QueryRunner:
             port=os.getenv("POSTGRES_PORT"),
         )
 
+    def wrap_single_transaction(func):
+        # decorator to wrap a function to create a new cursor per function call
+        @wraps(func)
+        def inner_func(self, *args, **kwargs):
+            try:
+                self.cursor = self.conn.cursor()
+                ans = func(self, *args, **kwargs)
+                self.conn.commit()
+                return ans
+            except Exception as err:
+                print(f"Exception encountered, rolling back: {err}")
+                self.conn.rollback()
+
+        return inner_func
+
     def tear_down_db_connection(self):
         self.conn.close()
         self.cursor.close()
 
+    @wrap_single_transaction
     def explain(self, query: str) -> QueryPlan:
         self.cursor.execute("EXPLAIN (FORMAT JSON) " + query)
         plan = self.cursor.fetchall()
@@ -36,6 +53,7 @@ class QueryRunner:
         query_plans = [self.explain(plan) for plan in plans]
         return sorted(query_plans, **kwargs)[:topK]
 
+    @wrap_single_transaction
     def find_table(self, column: str) -> str:
         # Find table names that the columns can be found in
         findTableQuery = sql.SQL(
@@ -74,6 +92,7 @@ class QueryRunner:
 
         return table
 
+    @wrap_single_transaction
     def find_bounds(self, column: str) -> list:
         table = self.find_table(column)
 
@@ -102,6 +121,7 @@ class QueryRunner:
 
         return reduced_bounds
 
+    @wrap_single_transaction
     def find_alt_partitions(self, table: str, column: str) -> list:
         col_query = (
             "SELECT * FROM pg_stats WHERE tablename='{}' and attname='{}'"
