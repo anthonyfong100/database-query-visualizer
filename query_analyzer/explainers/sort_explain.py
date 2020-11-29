@@ -1,4 +1,4 @@
-from color import bold_string
+from query_analyzer.explainers.color import bold_string
 
 
 def sort_explain(query_plan):
