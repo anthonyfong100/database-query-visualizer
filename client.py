@@ -24,62 +24,17 @@ def explain():
     bounds = res["bounds"]
     queryFormatted = res["query"]
     queries = permutate(bounds, queryFormatted)
-
-    # print(bounds)
-    query = """select
-        s_name,
-        count(*) as numwait
-    from
-        supplier,
-        lineitem l1,
-        orders,
-        nation
-    where
-        s_suppkey = l1.l_suppkey
-        and o_orderkey = l1.l_orderkey
-        and o_orderstatus = 'F'
-        and exists (
-            select
-                *
-            from
-                lineitem l2
-            where
-                l2.l_orderkey = l1.l_orderkey
-                and l2.l_suppkey <> l1.l_suppkey
-        )
-        and not exists (
-            select
-                *
-            from
-                lineitem l3
-            where
-                l3.l_orderkey = l1.l_orderkey
-                and l3.l_suppkey <> l1.l_suppkey
-                and l3.l_receiptdate > l3.l_commitdate
-        )
-        and s_nationkey = n_nationkey
-        and n_name = 'SAUDI ARABIA'
-    group by
-        s_name
-    order by
-        numwait desc,
-        s_name"""
-
-    queries = [query, query, query]
-    bounds = "12"
-    query = queries[0]
-
     top_plans_by_cost = query_runner.topKplans(
         queries, topK=3, key=lambda x: x.calculate_total_cost()
     )
 
-    graph_file_name = []
-    total_costs = []
-    explanations = []
-    for plan in top_plans_by_cost:
-        graph_file_name.append(plan.save_graph_file())
-        explanations.append(plan.create_explanation(plan.root))
-        total_costs.append(int(plan.calculate_total_cost()))
+    graph_file_name = [None for ix in range(3)]
+    total_costs = [None for ix in range(3)]
+    explanations = [None for ix in range(3)]
+    for ix, plan in enumerate(top_plans_by_cost):
+        graph_file_name[ix] = plan.save_graph_file()
+        explanations[ix] = plan.create_explanation(plan.root)
+        total_costs[ix] = int(plan.calculate_total_cost())
 
     clean_up_static_dir(graph_file_name)
 
@@ -98,50 +53,6 @@ def explain():
     }
 
     return render_template("index.html", **html_context)
-
-
-@app.route("/test_explain", methods=["GET"])
-def test_explain():
-    print("test explain endpoint hit")
-    query = """select
-    s_name,
-    count(*) as numwait
-from
-    supplier,
-    lineitem l1,
-    orders,
-    nation
-where
-    s_suppkey = l1.l_suppkey
-    and o_orderkey = l1.l_orderkey
-    and o_orderstatus = 'F'
-    and exists (
-        select
-            *
-        from
-            lineitem l2
-        where
-            l2.l_orderkey = l1.l_orderkey
-            and l2.l_suppkey <> l1.l_suppkey
-    )
-    and not exists (
-        select
-            *
-        from
-            lineitem l3
-        where
-            l3.l_orderkey = l1.l_orderkey
-            and l3.l_suppkey <> l1.l_suppkey
-            and l3.l_receiptdate > l3.l_commitdate
-    )
-    and s_nationkey = n_nationkey
-    and n_name = 'SAUDI ARABIA'
-group by
-    s_name
-order by
-    numwait desc,
-    s_name"""
-    return query_runner.explain(query).root.raw_json
 
 
 if __name__ == "__main__":
