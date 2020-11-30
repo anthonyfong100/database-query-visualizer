@@ -82,21 +82,29 @@ class QueryRunner:
 
         table = res[0][1]
 
-        # oldLevel = self.conn.isolation_level
-        # self.conn.set_isolation_level(0)
-        # analyzeQuery = sql.SQL(
-        #     """
-        #     VACUUM ANALYZE {queryTable} ({queryColumn});
-        #     """
-        # ).format(
-        #     queryTable=sql.Identifier(table),
-        #     queryColumn=sql.Identifier(column),
-        # )
-
-        # self.cursor.execute(analyzeQuery)
-        # self.conn.set_isolation_level(oldLevel)
-
         return table
+
+    @wrap_single_transaction
+    def is_col_numeric(self, table: str, column: str) -> bool:
+        if not table:
+            return False
+
+        col_datatype_query = sql.SQL(
+            """
+            SELECT data_type
+            FROM information_schema.columns
+            WHERE table_name = %s
+            and column_name = %s;
+            """
+        )
+
+        self.cursor.execute(col_datatype_query, [table, column])
+        col_datatype = self.cursor.fetchall()
+
+        if len(col_datatype) == 0:
+            return False
+
+        return col_datatype[0][0] == "numeric"
 
     @wrap_single_transaction
     def find_bounds(self, column: str) -> list:
