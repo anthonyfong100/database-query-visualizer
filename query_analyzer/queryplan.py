@@ -72,6 +72,13 @@ class QueryPlan:
     def calculate_plan_rows(self):
         return sum([x.plan_rows for x in self.graph.nodes])
 
+    def calculate_num_nodes(self, node_type: str):
+        node_count = 0
+        for node in self.graph.nodes:
+            if node.node_type == node_type:
+                node_count += 1
+        return node_count
+
     def save_graph_file(self):
         graph_name = f"graph_{str(time.time())}.png"
         filename = os.path.join(project_root, "static", graph_name)

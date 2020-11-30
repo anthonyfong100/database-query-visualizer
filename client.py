@@ -32,11 +32,15 @@ def explain():
     total_costs = [None for ix in range(3)]
     total_plan_rows = [None for ix in range(3)]
     explanations = [None for ix in range(3)]
+    seq_scans = [None for ix in range(3)]
+    index_scans = [None for ix in range(3)]
     for ix, plan in enumerate(top_plans_by_cost):
         graph_file_name[ix] = plan.save_graph_file()
         explanations[ix] = plan.create_explanation(plan.root)
         total_costs[ix] = int(plan.calculate_total_cost())
         total_plan_rows[ix] = int(plan.calculate_plan_rows())
+        seq_scans[ix] = int(plan.calculate_num_nodes("Seq Scan"))
+        index_scans[ix] = int(plan.calculate_num_nodes("Index Scan"))
 
     clean_up_static_dir(graph_file_name)
 
@@ -55,6 +59,12 @@ def explain():
         "total_plan_rows_1": total_plan_rows[0],
         "total_plan_rows_2": total_plan_rows[1],
         "total_plan_rows_3": total_plan_rows[2],
+        "total_seq_scan_1": seq_scans[0],
+        "total_seq_scan_2": seq_scans[1],
+        "total_seq_scan_3": seq_scans[2],
+        "total_index_scan_1": index_scans[0],
+        "total_index_scan_2": index_scans[1],
+        "total_index_scan_3": index_scans[2],
     }
 
     return render_template("index.html", **html_context)
