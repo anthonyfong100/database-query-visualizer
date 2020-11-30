@@ -45,7 +45,7 @@ class QueryRunner:
         self.cursor.execute("EXPLAIN (FORMAT JSON) " + query)
         plan = self.cursor.fetchall()
         query_plan_dict: dict = plan[0][0][0]["Plan"]
-        return QueryPlan(query_plan_dict)
+        return QueryPlan(query_plan_dict, query)
 
     def topKplans(
         self, plans: List[str], topK: int, **kwargs

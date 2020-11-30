@@ -44,10 +44,11 @@ class QueryPlan:
     A query plan is a directed graph made up of several Nodes
     """
 
-    def __init__(self, query_json):
+    def __init__(self, query_json, raw_query):
         self.graph = nx.DiGraph()
         self.root = Node(query_json)
         self._construct_graph(self.root)
+        self.raw_query = raw_query
 
     def _construct_graph(self, curr_node):
         self.graph.add_node(curr_node)
@@ -67,6 +68,9 @@ class QueryPlan:
 
     def calculate_total_cost(self):
         return sum([x.cost for x in self.graph.nodes])
+
+    def calculate_plan_rows(self):
+        return sum([x.plan_rows for x in self.graph.nodes])
 
     def save_graph_file(self):
         graph_name = f"graph_{str(time.time())}.png"

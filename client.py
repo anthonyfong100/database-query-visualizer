@@ -30,11 +30,13 @@ def explain():
 
     graph_file_name = [None for ix in range(3)]
     total_costs = [None for ix in range(3)]
+    total_plan_rows = [None for ix in range(3)]
     explanations = [None for ix in range(3)]
     for ix, plan in enumerate(top_plans_by_cost):
         graph_file_name[ix] = plan.save_graph_file()
         explanations[ix] = plan.create_explanation(plan.root)
         total_costs[ix] = int(plan.calculate_total_cost())
+        total_plan_rows[ix] = int(plan.calculate_plan_rows())
 
     clean_up_static_dir(graph_file_name)
 
@@ -50,6 +52,9 @@ def explain():
         "total_cost_1": total_costs[0],
         "total_cost_2": total_costs[1],
         "total_cost_3": total_costs[2],
+        "total_plan_rows_1": total_plan_rows[0],
+        "total_plan_rows_2": total_plan_rows[1],
+        "total_plan_rows_3": total_plan_rows[2],
     }
 
     return render_template("index.html", **html_context)

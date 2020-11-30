@@ -46,6 +46,26 @@ content %}
       {% endif %}
       <p class="mt-3"> Explanations are ordered from bottom of tree to top</p>
       <p class="mt-3"> Arrow points to sub queries to be executed by this query</p>
+      <table style="width:100%">
+        <tr>
+          <th>Metric</th>
+          <th>Query plan 1</th>
+          <th>Query plan 2</th>
+          <th>Query plan 3</th>
+        </tr>
+        <tr>
+          <td>Total cost</td>
+          <td>{{total_cost_1}}</td>
+          <td>{{total_cost_2}}</td>
+          <td>{{total_cost_3}}</td>
+        </tr>
+        <tr>
+          <td>Total plan rows</td>
+          <td>{{total_plan_rows_1}}</td>
+          <td>{{total_plan_rows_2}}</td>
+          <td>{{total_plan_rows_3}}</td>
+        </tr>
+      </table>
       <hr />
       <h3 class="mt-3">Query Plan 1</h3>
       {% if total_cost_1 %}
