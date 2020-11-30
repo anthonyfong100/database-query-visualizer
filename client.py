@@ -21,6 +21,23 @@ def explain():
 
     query = request.form["queryText"]
     res = parse(query)
+
+    if res["error"]:
+        err = "Invalid query. Ensure that no columns with non-numerical data types have the VARY prefix"
+
+        if res["err_msg"]:
+            err = res["err_msg"]
+
+        html_context = {
+            "query": err,
+            "explanation_1": [err],
+            "explanation_2": [err],
+            "explanation_3": [err],
+            "bounds": [err],
+        }
+
+        return render_template("index.html", **html_context)
+
     bounds = res["bounds"]
     queryFormatted = res["query"]
     queries = permutate(bounds, queryFormatted)
